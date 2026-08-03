@@ -28,9 +28,7 @@ jobs:
           git config --global user.name "chabb"
       - name: Approve packages
         run: |
-            npm approve-scripts nx
-            npm approve-scripts parcel
-            npm approve-scripts esbuild
+            npm config set allow-scripts=nx,parcel,esbuild
 
       - name: Run newVersion.sh
         run: ./newVersion.sh
