@@ -26,6 +26,11 @@ jobs:
         run: |
           git config --global user.email "chabbey78@gmail.com"
           git config --global user.name "chabb"
+      - name: Approve packages
+        run: |
+            npm approve-scripts nx
+            npm approve-scripts parcel
+            npm approve-scripts esbuild
 
       - name: Run newVersion.sh
         run: ./newVersion.sh
