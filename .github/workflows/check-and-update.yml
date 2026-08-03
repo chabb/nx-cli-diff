@@ -31,3 +31,28 @@ jobs:
         run: ./newVersion.sh
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       - name: Collect error.log files
+         if: always()
+         run: |
+          echo "Searching for error.log under /private/var/folders/df..."
+          set -euo pipefail
+          found=false
+          mkdir -p logs
+          # Find matching files and copy them into logs/ with a unique name
+          while IFS= read -r -d '' file; do
+            echo "Found: $file"
+            # make a filesystem-safe unique name by replacing slashes
+            base_name=$(echo "$file" | sed 's|/|__|g' | sed 's|^__||')
+            cp "$file" "logs/${base_name}"
+            found=true
+          done < <(find /private/var/folders/df -type f -name 'error.log' -print0 2>/dev/null || true)
+          if [ "$found" = "false" ]; then
+            echo "No error.log found under /private/var/folders/df"
+          fi
+
+      - name: Upload error logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-logs
+          path: logs    
