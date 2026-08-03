@@ -1,6 +1,7 @@
 name: Check and update
 
 on:
+  workflow_dispatch:  # Add this to enable manual runs
   push:
     branches:
       - main
