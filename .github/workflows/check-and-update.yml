@@ -30,6 +30,7 @@ jobs:
         run: |
             npm config set allow-scripts=nx,parcel,esbuild
             npm config set logs-dir .
+            echo "allow-scripts=nx,parcel,esbuild" > .npmrc
 
       - name: Run newVersion.sh
         run: ./newVersion.sh
