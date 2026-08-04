@@ -67,7 +67,14 @@ NEWLINE/g' README.md && rm README.md.bak
   rebaseNeeded=true
   git checkout -b "${version}"
   rm -rf org
-  npx --yes create-nx-workspace@"${version}" --name=org --preset=angular-monorepo --appName=frontend --bundler=esbuild --style=scss --no-ssr --verbose --e2eTestRunner=playwright --nxCloud=skip --unitTestRunner=vitest --aiAgents
+  if (npx --yes create-nx-workspace@"${version}" --name=org --preset=angular-monorepo --appName=frontend --bundler=esbuild --style=scss --no-ssr --e2eTestRunner=playwright --nxCloud=skip --unitTestRunner=vitest --aiAgents); then
+    echo "Command ran successfully"
+  else
+    echo "Command fail, trying to approve scripts"
+    # retrying 
+    npm approve-scripts esbuild @parcel/watcher nx
+    npx --yes create-nx-workspace@"${version}" --name=org --preset=angular-monorepo --appName=frontend --bundler=esbuild --style=scss --no-ssr --e2eTestRunner=playwright --nxCloud=skip --unitTestRunner=vitest --aiAgents
+  fi
   cd org
   npx nx g @nx/angular:library --directory=libs/my-lib --publishable=true --importPath=@org/my-lib --no-interactive
   npx nx add @nx/nest
