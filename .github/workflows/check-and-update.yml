@@ -46,6 +46,8 @@ jobs:
             echo "Found: $file"
             # make a filesystem-safe unique name by replacing slashes
             base_name=$(echo "$file" | sed 's|/|__|g' | sed 's|^__||')
+            echo "Content"
+            cat $file
             cp "$file" "logs/${base_name}"
             found=true
           done < <(find /private/var/folders/df -type f -name 'error.log' -print0 2>/dev/null || true)
